@@ -138,8 +138,12 @@ class Updater {
 
       this.notify(`Updated to v${info.version} — restarting…`);
       console.log('UPDATE_APPLIED', info.version);
-      // absolute app path so relaunch works regardless of the caller's cwd
-      app.relaunch({ args: [appPath, ...process.argv.slice(2)] });
+      // relaunch with an absolute app path; carry only real switches across
+      // (run.sh execs `electron [--no-sandbox] . <flags>`, so argv[1] may be
+      // --no-sandbox and argv[2] is the app path itself)
+      const argv = process.argv.slice(1);
+      const flags = argv.filter(a => a.startsWith('--'));
+      app.relaunch({ args: [appPath, ...new Set(flags)] });
       app.exit(0);
       return { ok: true, version: info.version };
     } finally {

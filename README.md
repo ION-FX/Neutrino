@@ -11,6 +11,16 @@ artifacts, and every line of app code is dependency-free vanilla JS.
 
 ## Quick start (Linux)
 
+One-liner install (no npm, no root — grabs the latest release, links the
+`neutrino` command, pre-fetches the Electron runtime so the first launch is
+instant):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ION-FX/Neutrino/main/install.sh | bash
+```
+
+Or from a clone of this repo:
+
 ```bash
 ./run.sh
 ```
@@ -23,6 +33,20 @@ Debian/Ubuntu).
 macOS / Windows: download the Electron zip yourself from
 https://github.com/electron/electron/releases, then run
 `NEUTRINO_ELECTRON=/path/to/electron ./run.sh` (or `electron .` on Windows).
+
+## Updates
+
+Installed via the one-liner? Neutrino keeps itself fresh:
+
+- Checks GitHub releases once a day, or on demand via
+  **Settings → Updates → Check for updates** (also in the ⋯ menu and the
+  Ctrl+K palette).
+- When an update is found it downloads the release tarball, stages it next to
+  the install, carries the cached Electron runtime across, swaps the
+  directories atomically (rollback on failure) and relaunches.
+- Your data is untouched — it all lives in `~/.neutrino`.
+- Not a managed install (dev checkout)? The check still works, but "update"
+  opens the releases page instead of touching your files.
 
 ## The memory story
 
