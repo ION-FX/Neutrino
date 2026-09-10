@@ -22,11 +22,12 @@ const INVOKE_CHANNELS = new Set([
   'data:clear',
   'mcp:apply', 'mcp:regenerateToken', 'mcp:status',
   'clipboard:write', 'app:openDownloads',
+  'update:check', 'update:apply', 'update:status',
 ]);
 
 const PUSH_CHANNELS = new Set(['ui:tabs', 'ui:nav', 'ui:adblock', 'ui:mem', 'ui:maximized',
   'ui:find', 'ui:notice', 'ui:omniboxFocus', 'ui:openSettings', 'ui:openPalette', 'ui:themeChanged',
-  'ui:ctxmenu', 'ui:openShortcuts']);
+  'ui:ctxmenu', 'ui:openShortcuts', 'ui:update']);
 
 contextBridge.exposeInMainWorld('neutrino', {
   invoke: (channel, payload) => {

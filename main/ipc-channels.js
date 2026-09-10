@@ -19,10 +19,11 @@ const INVOKE_CHANNELS = [
   'data:clear',
   'mcp:apply', 'mcp:regenerateToken', 'mcp:status',
   'clipboard:write', 'app:openDownloads',
+  'update:check', 'update:apply', 'update:status',
 ];
 
 const PUSH_CHANNELS = ['ui:tabs', 'ui:nav', 'ui:adblock', 'ui:mem', 'ui:maximized',
   'ui:find', 'ui:notice', 'ui:omniboxFocus', 'ui:openSettings', 'ui:openPalette', 'ui:themeChanged',
-  'ui:ctxmenu', 'ui:openShortcuts'];
+  'ui:ctxmenu', 'ui:openShortcuts', 'ui:update'];
 
 module.exports = { INVOKE_CHANNELS, PUSH_CHANNELS };

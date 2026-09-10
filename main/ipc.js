@@ -7,7 +7,7 @@ const path = require('path');
 const { SEARCH_ENGINES, engineUrlFor } = require('./settings');
 const { INVOKE_CHANNELS } = require('./ipc-channels');
 
-function wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mcp }) {
+function wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mcp, updater }) {
   const ok = (fn) => (_e, payload) => fn(payload);
 
   ipcMain.handle('win:minimize', () => win.minimize());
@@ -109,6 +109,11 @@ function wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mc
   ipcMain.handle('mcp:regenerateToken', () => mcp ? mcp.regenerateToken() : '');
   ipcMain.handle('mcp:status', () => mcp ? mcp.status() : { running: false });
   ipcMain.handle('clipboard:write', ok(({ text }) => { clipboard.writeText(String(text ?? '')); return true; }));
+
+  ipcMain.handle('update:check', () => updater ? updater.check() : updater_fallback());
+  ipcMain.handle('update:apply', () => updater ? updater.apply() : { ok: false });
+  ipcMain.handle('update:status', () => updater ? updater.status() : { current: app.getVersion(), managed: false });
+  function updater_fallback() { return { current: app.getVersion(), managed: false }; }
 
   ipcMain.handle('data:clear', ok(async ({ cache, cookies, history: hist }) => {
     const ses = win.webContents.session;

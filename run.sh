@@ -5,7 +5,14 @@
 # supply your own via NEUTRINO_ELECTRON=/path/to/electron.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# resolve symlinks (the `neutrino` command is a symlink into ~/.local/bin)
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  case "$SOURCE" in /*) ;; *) SOURCE="$DIR/$SOURCE" ;; esac
+done
+ROOT="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 cd "$ROOT"
 
 if [ -n "${NEUTRINO_ELECTRON:-}" ]; then

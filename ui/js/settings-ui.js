@@ -458,6 +458,33 @@
       }
     });
 
+    // ---- Updates ----
+    const updSec = section('Updates', 'updates');
+    const updStatus = document.createElement('div');
+    updStatus.className = 'stat-block';
+    updStatus.textContent = 'Checking…';
+    updSec.appendChild(updStatus);
+    const updRow = document.createElement('div');
+    updRow.className = 'set-row';
+    updRow.innerHTML = `
+      <button class="btn" data-check>Check for updates</button>
+      <button class="btn primary" data-apply hidden></button>`;
+    updRow.querySelector('[data-check]').addEventListener('click', async () => {
+      updStatus.textContent = 'Checking…';
+      const s = await NT.invoke('update:check');
+      fillUpdStatus(updStatus, updRow.querySelector('[data-apply]'), s);
+    });
+    updRow.querySelector('[data-apply]').addEventListener('click', async (e) => {
+      e.target.disabled = true;
+      NT.toast('zap', 'Applying update — Neutrino will restart');
+      await NT.invoke('update:apply');
+    });
+    updSec.appendChild(updRow);
+    updSec.appendChild(switchRow('Check for updates automatically', st.updates.autoCheck !== false,
+      v => NT.saveSettings({ updates: { autoCheck: v } }), 'Once a day'));
+    body.appendChild(updSec);
+    NT.invoke('update:status').then(s => fillUpdStatus(updStatus, updRow.querySelector('[data-apply]'), s));
+
     // ---- Data ----
     const data = section('Data & privacy', 'data');
     const exitSec = document.createElement('div');
@@ -482,6 +509,23 @@
     data.insertAdjacentHTML('beforeend',
       `<div class="stat-block">Neutrino 0.1 · Chromium via Electron<br>All data lives in <b>~/.neutrino</b></div>`);
     body.appendChild(data);
+  }
+
+  function fillUpdStatus(el, applyBtn, s) {
+    if (!el) return;
+    let line = `Current version <b>v${s.current}</b>`;
+    if (s.updateAvailable) line += ` · update to <b>v${s.latest}</b> available`;
+    else if (s.latest) line += ` · up to date`;
+    if (s.busy) line += ' · working…';
+    if (s.error) line += `<br><span style="color:var(--danger)">check failed: ${NT.escapeHtml(s.error)}</span>`;
+    if (s.lastCheck) line += `<br><span style="color:var(--text-faint)">last checked ${new Date(s.lastCheck).toLocaleString()}</span>`;
+    if (!s.managed) line += `<br><span style="color:var(--text-faint)">manual install — updates open the releases page instead</span>`;
+    el.innerHTML = line;
+    if (applyBtn) {
+      applyBtn.hidden = !s.updateAvailable;
+      applyBtn.textContent = `Update to v${s.latest}`;
+      applyBtn.disabled = false;
+    }
   }
 
   function updateMemStats(el) {

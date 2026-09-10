@@ -61,7 +61,7 @@ fi
 
 # ── download & extract ──────────────────────────────────────────────────────
 log "Downloading…"
-curl -fL --retry 5 --retry-all-errors "${AUTH[@]}" -o "$TMP/neutrino.tar.gz" "$TARBALL_URL"
+curl -fsSL --retry 5 --retry-all-errors -o "$TMP/neutrino.tar.gz" "$TARBALL_URL"
 
 STAGE="$TMP/app"
 mkdir -p "$STAGE"

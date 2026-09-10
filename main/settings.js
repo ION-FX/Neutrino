@@ -30,6 +30,7 @@ const DEFAULTS = {
 
   downloads: { askWhere: false },            // ask where to save each file
   clearOnExit: { cache: false, cookies: false, history: false },
+  updates: { autoCheck: true, lastCheck: 0 },
 
   suspendAfterMin: 10,        // 0 = never auto-suspend background tabs
   suspendAudible: false,      // if true, even audible tabs may sleep
@@ -89,6 +90,7 @@ function load(file) {
   merged.mcp = { ...DEFAULTS.mcp, ...(stored.mcp || {}) };
   merged.downloads = { ...DEFAULTS.downloads, ...(stored.downloads || {}) };
   merged.clearOnExit = { ...DEFAULTS.clearOnExit, ...(stored.clearOnExit || {}) };
+  merged.updates = { ...DEFAULTS.updates, ...(stored.updates || {}) };
   if (!Array.isArray(stored.categories) || !stored.categories.length) {
     merged.categories = DEFAULTS.categories;
   }
@@ -111,6 +113,7 @@ class SettingsStore {
     if (patch.mcp) next.mcp = { ...this.state.mcp, ...patch.mcp };
     if (patch.downloads) next.downloads = { ...this.state.downloads, ...patch.downloads };
     if (patch.clearOnExit) next.clearOnExit = { ...this.state.clearOnExit, ...patch.clearOnExit };
+    if (patch.updates) next.updates = { ...this.state.updates, ...patch.updates };
     this.state = next;
     this._save();
     for (const fn of this._listeners) { try { fn(this.state); } catch {} }

@@ -28,6 +28,7 @@
     { ic: 'zoom', title: 'Zoom out', kind: 'command', fn: () => NT.invoke('nav:action', { action: 'zoomOut' }) },
     { ic: 'zoom', title: 'Reset zoom', kind: 'command', fn: () => NT.invoke('nav:action', { action: 'zoomReset' }) },
     { ic: 'gear', title: 'Settings', kind: 'command', fn: () => NT.openSettings() },
+    { ic: 'zap', title: 'Check for updates', kind: 'command', fn: async () => { const s = await NT.invoke('update:check'); NT.toast('zap', s.updateAvailable ? `Neutrino v${s.latest} available` : s.error ? `Update check failed: ${s.error}` : `Up to date (v${s.current})`); } },
     { ic: 'puzzle', title: 'Extensions', kind: 'command', fn: () => NT.openSettings('extensions') },
     { ic: 'cmd', title: 'Keyboard shortcuts (F1)', kind: 'command', fn: () => window.NTSHORTCUTS.open() },
     { ic: 'close', title: 'Quit Neutrino', kind: 'command', fn: () => NT.invoke('app:quit') },

@@ -303,6 +303,19 @@ async function composeScreenshot(outPath) {
 async function runTestHooks() {
   const shoot = process.env.NEUTRINO_SHOOT;
   const scenario = process.env.NEUTRINO_SCENARIO;
+  if (scenario === 'update-test') {
+    await new Promise(r => setTimeout(r, 3000));
+    const st = await updater.check();
+    console.log('UPDATE_CHECK', JSON.stringify(st));
+    if (st.updateAvailable) {
+      console.log('UPDATE_APPLYING v' + st.latest);
+      await updater.apply();   // swaps dirs, relaunches, exits
+    } else {
+      console.log('NO_UPDATE');
+      app.exit(0);
+    }
+    return;
+  }
   if (scenario === 'settings') {
     await new Promise(r => setTimeout(r, 2500));
     win.webContents.send('ui:openSettings', process.env.NEUTRINO_SETTINGS_SECTION || 'developer');
@@ -397,8 +410,20 @@ app.whenReady().then(async () => {
   const mcp = new MCPServer({ settings, tabs, history, engine, notify });
   if (settings.get().mcp.enabled) mcp.apply();
 
+  // Self-updater via GitHub releases (Settings → Updates).
+  const { Updater } = require('./updater');
+  const updater = new Updater({ settings, notify });
+  const autoCheck = setTimeout(async () => {
+    const u = settings.get().updates || {};
+    if (!u.autoCheck) return;
+    if (Date.now() - (u.lastCheck || 0) < 20 * 3600 * 1000) return;
+    await updater.check();
+    if (win && !win.isDestroyed()) win.webContents.send('ui:update', updater.status());
+  }, 45000);
+  autoCheck.unref?.();
+
   const { wire } = require('./ipc');
-  wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mcp });
+  wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mcp, updater });
 
   // Mouse-only navigation: back/forward thumb buttons (XButton1/2).
   win.on('app-command', (_e, cmd) => {

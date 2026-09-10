@@ -1,7 +1,7 @@
 {
   "name": "neutrino",
   "productName": "Neutrino",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A memory-conscious Chromium browser with tabs on the left.",
   "main": "main/main.js",
   "author": "Neutrino contributors",

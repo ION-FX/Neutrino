@@ -344,6 +344,7 @@
       { ic: 'puzzle', label: 'Extensions…', fn: () => openSettings('extensions') },
       { ic: 'sparkle', label: 'Toggle theme', fn: () => toggleTheme() },
       { sep: true },
+      { ic: 'zap', label: 'Check for updates', fn: async () => { const s = await NT.invoke('update:check'); if (s.updateAvailable) { NT.toast('zap', `Neutrino v${s.latest} available`); openSettings('updates'); } else NT.toast('check', s.error ? `Check failed: ${s.error}` : `Up to date (v${s.current})`); } },
       { ic: 'keyboard', label: 'Keyboard & mouse (F1)', fn: () => openShortcuts() },
       { ic: 'gear', label: 'Settings', fn: () => openSettings() },
       { ic: 'shield', label: `About Neutrino`, fn: () => openSettings('memory') },
