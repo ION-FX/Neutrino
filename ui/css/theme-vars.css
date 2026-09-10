@@ -1,0 +1,95 @@
+/* Shared theme variables — used by the browser chrome and the new-tab page. */
+
+:root {
+  --sbw: 268px;
+  --accent: #7aa2ff;
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+  --danger: #ff6b7a;
+  --ok: #4fd1a5;
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --font: system-ui, -apple-system, "Segoe UI", Ubuntu, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+
+  --anim: 180ms cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ---- Liquid Glass (dark) --------------------------------------------------- */
+body[data-theme="liquid"] {
+  --bg-0: #06080d;
+  --bg-1: #0b0f18;
+  --glass: rgba(21, 27, 40, 0.52);
+  --glass-strong: rgba(26, 33, 48, 0.72);
+  --glass-input: rgba(10, 13, 20, 0.45);
+  --border: rgba(255, 255, 255, 0.085);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --text: #e9edf5;
+  --text-dim: #a7b0c0;
+  --text-faint: #67707f;
+  --hover: rgba(255, 255, 255, 0.06);
+  --active-card: rgba(255, 255, 255, 0.09);
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --blur: 24px;
+  --glow: color-mix(in srgb, var(--accent) 35%, transparent);
+  --blob-o: 1;
+}
+
+/* ---- Galaxy ------------------------------------------------------------------ */
+body[data-theme="galaxy"] {
+  --bg-0: #04050c;
+  --bg-1: #0a0c20;
+  --glass: rgba(13, 15, 34, 0.36);
+  --glass-strong: rgba(16, 19, 42, 0.66);
+  --glass-input: rgba(6, 7, 18, 0.44);
+  --border: rgba(171, 148, 255, 0.18);
+  --border-strong: rgba(171, 148, 255, 0.3);
+  --text: #ece9ff;
+  --text-dim: #a9a3cf;
+  --text-faint: #6d6896;
+  --hover: rgba(178, 163, 255, 0.1);
+  --active-card: rgba(178, 163, 255, 0.14);
+  --shadow: 0 12px 44px rgba(2, 2, 12, 0.6);
+  --blur: 15px;
+  --glow: color-mix(in srgb, var(--accent) 45%, transparent);
+  --blob-o: 0.7;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg-0);
+  user-select: none;
+  cursor: default;
+}
+
+body.reduce-motion * {
+  animation-duration: 0.001s !important;
+  transition-duration: 0.001s !important;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+input {
+  font-family: inherit;
+  color: var(--text);
+  background: none;
+  border: none;
+  outline: none;
+}

@@ -1,0 +1,6 @@
+# local runtime & VM test scaffolding — never committed
+.runtime/
+scripts/.vm-pkgs/
+scripts/.vm-root/
+dist/
+*.log

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>Neutrino</title>
+  <link rel="stylesheet" href="css/theme-vars.css" />
+  <link rel="stylesheet" href="css/chrome.css" />
+</head>
+<body data-theme="liquid">
+  <div id="backdrop" aria-hidden="true">
+    <canvas id="galaxy-canvas"></canvas>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div id="app">
+    <aside id="sidebar">
+      <div id="titlebar">
+        <div class="logo" id="logo"></div>
+        <div class="win-controls">
+          <button id="wc-min" title="Minimize"></button>
+          <button id="wc-max" title="Maximize"></button>
+          <button id="wc-close" title="Close"></button>
+        </div>
+      </div>
+
+      <div id="omnibox-wrap">
+        <span id="omni-leading"></span>
+        <input id="omnibox" placeholder="Search or enter address" spellcheck="false" autocomplete="off" />
+        <span id="find-count" hidden></span>
+        <button id="omni-shield" title="Blocked requests"></button>
+      </div>
+
+      <div id="nav-row">
+        <button id="nav-back" title="Back"></button>
+        <button id="nav-fwd" title="Forward"></button>
+        <button id="nav-reload" title="Reload"></button>
+        <span class="spacer"></span>
+        <button id="btn-palette" title="Search everything (Ctrl+K)"></button>
+        <button id="btn-menu" title="Menu"></button>
+      </div>
+
+      <div id="sidebar-main">
+        <div id="tabs-scroll"></div>
+
+        <div id="palette" hidden>
+          <input id="palette-input" placeholder="Search tabs, history, commands…" spellcheck="false" />
+          <div id="palette-list"></div>
+          <div class="palette-hint"><span>↑↓ navigate</span><span>↵ open</span><span>esc close</span></div>
+        </div>
+      </div>
+
+      <div id="toasts"></div>
+
+      <div id="sidebar-footer">
+        <button id="new-tab"><span id="nt-icon"></span><span class="lbl">New tab</span></button>
+        <div id="status-row">
+          <span id="stat-mem" title="Memory"></span>
+          <span class="spacer"></span>
+          <button id="btn-theme" title="Switch theme (Ctrl+Shift+D)"></button>
+          <button id="btn-settings" title="Settings (Ctrl+,)"></button>
+        </div>
+      </div>
+    </aside>
+
+    <div id="sidebar-resize" title="Drag to resize"></div>
+
+    <div id="main-col">
+      <div id="topbar" hidden>
+        <span class="tb-spacer"></span>
+      </div>
+      <main id="content">
+        <div id="content-hint">
+          <div class="mark"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="shortcuts-overlay" hidden></div>
+  <div id="settings-drawer" hidden>
+    <header>
+      <h2>Settings</h2>
+      <button id="settings-close"></button>
+    </header>
+    <div id="settings-body"></div>
+  </div>
+
+  <div id="ctx-menu" hidden></div>
+  <div id="popover" hidden></div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/galaxy-bg.js"></script>
+  <script src="js/palette.js"></script>
+  <script src="js/settings-ui.js"></script>
+  <script src="js/renderer.js"></script>
+</body>
+</html>

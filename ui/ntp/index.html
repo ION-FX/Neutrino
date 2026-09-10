@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Our own protocol-served page; data is injected server-side below. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
+  <title>New tab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4' fill='%237aa2ff'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="neutrino://newtab/css/theme-vars.css" />
+  <link rel="stylesheet" href="neutrino://newtab/css/ntp.css" />
+  <script>window.__NTP__ = __NTP_DATA__;</script>
+</head>
+<body data-theme="liquid">
+  <div id="backdrop">
+    <canvas id="galaxy-canvas"></canvas>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <main id="ntp">
+    <div id="clock-wrap">
+      <div id="clock">--:--</div>
+      <div id="greeting"></div>
+    </div>
+
+    <form id="search">
+      <button type="submit" id="search-btn" aria-label="Search"></button>
+      <input id="q" type="text" placeholder="Search the web…" autocomplete="off" spellcheck="false" autofocus />
+    </form>
+
+    <nav id="links"></nav>
+
+    <div id="hint">Ctrl+K search everything · tabs in Waste stay asleep after restart</div>
+  </main>
+
+  <script src="neutrino://newtab/js/icons.js"></script>
+  <script src="neutrino://newtab/js/galaxy-bg.js"></script>
+  <script>
+    (function () {
+      const D = window.__NTP__ || {};
+      document.body.dataset.theme = D.theme || 'liquid';
+      if (D.reduceMotion) document.body.classList.add('reduce-motion');
+      document.documentElement.style.setProperty('--accent', D.accent || '#7aa2ff');
+
+      // search
+      const engineUrl = D.engineUrl || 'https://duckduckgo.com/?q=%s';
+      document.getElementById('search-btn').innerHTML = window.NTICONS.icon('search');
+      document.getElementById('search').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const v = document.getElementById('q').value.trim();
+        if (!v) return;
+        location.href = engineUrl.includes('%s') ? engineUrl.replace('%s', encodeURIComponent(v)) : v;
+      });
+
+      // quick links
+      const links = document.getElementById('links');
+      for (const l of (D.quickLinks || [])) {
+        const a = document.createElement('a');
+        a.className = 'ql';
+        a.href = l.url;
+        let host = ''; try { host = new URL(l.url).hostname.replace(/^www\./, ''); } catch {}
+        const hue = [...(host || l.title)].reduce((x, c) => x + c.charCodeAt(0), 0) % 360;
+        a.innerHTML = `<span class="ql-ic" style="--h:${hue}">${(l.title[0] || '?').toUpperCase()}</span>
+          <span class="ql-t">${l.title.replace(/[&<>"]/g, '')}</span>`;
+        links.appendChild(a);
+      }
+
+      // clock
+      const clock = document.getElementById('clock');
+      const greet = document.getElementById('greeting');
+      if (D.showClock === false) {
+        document.getElementById('clock-wrap').style.display = 'none';
+      }
+      function tick() {
+        const d = new Date();
+        clock.textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const h = d.getHours();
+        greet.textContent = h < 5 ? 'Up late?' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+      }
+      tick(); setInterval(tick, 10000);
+
+      if ((D.theme || 'liquid') === 'galaxy') {
+        window.NTGALAXY.init(document.getElementById('galaxy-canvas'), { reduceMotion: D.reduceMotion });
+      }
+    })();
+  </script>
+</body>
+</html>
