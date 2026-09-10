@@ -31,6 +31,7 @@ let tabs = null;
 let history = null;
 let engine = null;
 let ext = null;
+let updater = null;
 
 const MIME = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
@@ -412,7 +413,7 @@ app.whenReady().then(async () => {
 
   // Self-updater via GitHub releases (Settings → Updates).
   const { Updater } = require('./updater');
-  const updater = new Updater({ settings, notify });
+  updater = new Updater({ settings, notify });
   const autoCheck = setTimeout(async () => {
     const u = settings.get().updates || {};
     if (!u.autoCheck) return;
