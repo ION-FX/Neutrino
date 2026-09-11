@@ -488,6 +488,9 @@
   $('#wc-max').addEventListener('click', () => invoke('win:maximize'));
   $('#wc-close').addEventListener('click', () => invoke('win:close'));
   $('#titlebar').addEventListener('dblclick', () => invoke('win:toggleMax'));
+  $('#win-chip').addEventListener('dblclick', (e) => {
+    if (!e.target.closest('button')) invoke('win:toggleMax');
+  });
 
   const resizeBar = $('#sidebar-resize');
   resizeBar.addEventListener('mousedown', (e) => {

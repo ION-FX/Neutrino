@@ -61,6 +61,8 @@ body.sidebar-right #main-col { margin: 8px 0 8px 8px; }
   -webkit-backdrop-filter: blur(var(--blur)) saturate(1.55);
   -webkit-app-region: drag;
 }
+/* keep the top bar's right end clear for the floating window-controls chip */
+body.topbar:not(.sidebar-right) #topbar { padding-right: 112px; }
 #topbar button,
 #topbar input,
 #topbar #omnibox-wrap { -webkit-app-region: no-drag; }
@@ -157,7 +159,51 @@ body[data-theme="galaxy"] #sidebar::before {
   opacity: .85;
 }
 
-/* ---------- titlebar / window controls ---------- */
+/* ---------- window controls: always pinned to the window's top-right ---------- */
+#win-chip {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 500;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 9px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-app-region: drag;
+}
+#win-chip button {
+  width: 28px;
+  height: 20px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  -webkit-app-region: no-drag;
+  transition: background var(--anim), color var(--anim);
+}
+#win-chip button .ic { width: 11px; height: 11px; display: block; }
+#win-chip button:hover { background: var(--hover); color: var(--text); }
+#wc-close:hover { background: var(--danger); color: #fff; }
+
+/* when the top bar is off and the rail is on the left, the page view is
+   pushed down so the chip never sits over native content */
+body:not(.topbar):not(.sidebar-right) #drag-strip {
+  display: block;
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  height: 36px;
+  z-index: 1;
+  -webkit-app-region: drag;
+}
+
+/* ---------- titlebar (logo + drag region) ---------- */
 #titlebar {
   display: flex;
   align-items: center;
@@ -168,17 +214,8 @@ body[data-theme="galaxy"] #sidebar::before {
 }
 .logo { width: 20px; height: 20px; color: var(--text-dim); }
 .logo-svg { width: 100%; height: 100%; }
-.win-controls { display: flex; gap: 2px; -webkit-app-region: no-drag; }
-.win-controls button {
-  width: 28px; height: 20px;
-  border-radius: 6px;
-  display: grid; place-items: center;
-  color: var(--text-faint);
-  transition: background var(--anim), color var(--anim);
-}
-.win-controls button .ic { width: 11px; height: 11px; display: block; }
-.win-controls button:hover { background: var(--hover); color: var(--text); }
-#wc-close:hover { background: var(--danger); color: #fff; }
+body.no-labels .logo { display: none; }
+body.no-labels #titlebar { height: 14px; }
 
 /* ---------- omnibox ---------- */
 #omnibox-wrap {
@@ -652,6 +689,8 @@ body.no-labels .t-title, body.no-labels #new-tab .lbl, body.no-labels .cat-name 
 body.no-labels .tab { justify-content: center; padding: 0; }
 body.no-labels .cat-head { justify-content: center; }
 body.no-labels #new-tab { justify-content: center; }
+body.no-labels #stat-mem { display: none; }
+body.no-labels .cat-extra { display: none !important; }
 /* omnibox collapses into the sidebar only when there is no top bar */
 body.no-labels:not(.topbar) #omnibox { width: 0; padding: 0; }
 body.no-labels:not(.topbar) #omnibox-wrap { justify-content: center; }

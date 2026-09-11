@@ -453,7 +453,11 @@ class TabManager extends require('events').EventEmitter {
       x = Math.round(eff + 14);
       width = Math.max(0, w - x - overlay);
     }
-    const y = this.topBar ? 8 + Math.round(50 * this.uiScale) : 8;
+    const y = this.topBar
+      ? 8 + Math.round(50 * this.uiScale)
+      // no top bar: keep the page view clear of the floating window-controls
+      // chip — it only overlaps the view when the rail is on the left
+      : (this.sidebarSide === 'left' ? 44 : 8);
     const bounds = { x, y, width, height: Math.max(0, h - y - 8) };
     this._lastBounds = bounds;
     try {

@@ -88,6 +88,8 @@ browser can change that. What Neutrino fixes is the *other* thirty tabs.
 - A slim **top bar** above the page holds the address bar and back/forward/
   reload/palette/menu (turn it off in Settings → Appearance if you prefer the
   Arc-style no-bar look; everything then lives in the sidebar).
+- Window controls (– □ ✕) always float at the window's top-right corner,
+  whatever the layout; the whole chip is a drag handle.
 - Tab names can be turned off entirely (Settings → Appearance) for an
   icon-only rail.
 - **Liquid Glass**: dark translucent panels, blur, drifting color fields.
