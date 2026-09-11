@@ -28,19 +28,26 @@
     document.body.classList.toggle('compact', !!st.compact);
     document.body.classList.toggle('reduce-motion', !!st.reduceMotion);
     document.body.classList.toggle('topbar', !!st.topBar);
+    document.body.classList.toggle('sidebar-right', st.sidebarSide === 'right');
     layoutTopBar(!!st.topBar);
     // UI scale: zoom the sidebar + top bar; the page view offset in the main
     // process must match, so send the effective (scaled) sidebar width too.
     const scale = st.uiScale || 1;
     document.documentElement.style.setProperty('--ui-zoom', String(scale));
     const effWidth = Math.round((st.tabLabels ? st.sidebarWidth : 64) * scale);
+    // glass transparency + corner radius
+    document.body.style.setProperty('--glass-a', String(Math.max(0.15, Math.min(0.95, (st.glassOpacity ?? 52) / 100))));
+    document.documentElement.style.setProperty('--radius', (st.cornerRadius ?? 14) + 'px');
 
     if (st.theme === 'galaxy') {
       if (!S.galaxyDestroy) S.galaxyDestroy = window.NTGALAXY.init($('#galaxy-canvas'), { reduceMotion: st.reduceMotion });
     } else if (S.galaxyDestroy) {
       S.galaxyDestroy(); S.galaxyDestroy = null;
     }
-    invoke('ui:layout', { sidebarWidth: effWidth, topBar: !!st.topBar, uiScale: scale });
+    invoke('ui:layout', {
+      sidebarWidth: effWidth, topBar: !!st.topBar, uiScale: scale,
+      sidebarSide: st.sidebarSide === 'right' ? 'right' : 'left',
+    });
   }
 
   // The omnibox + nav row live in the sidebar by default; with the top bar on
@@ -487,8 +494,11 @@
     e.preventDefault();
     const startX = e.clientX, startW = S.settings.sidebarWidth;
     const zoom = S.settings.uiScale || 1;
+    const rightSide = S.settings.sidebarSide === 'right';
     const move = (ev) => {
-      const w = Math.max(210, Math.min(460, Math.round(startW + (ev.clientX - startX) / zoom)));
+      // left rail grows to the right; right rail grows to the left
+      const dx = rightSide ? startX - ev.clientX : ev.clientX - startX;
+      const w = Math.max(210, Math.min(460, Math.round(startW + dx / zoom)));
       S.settings.sidebarWidth = w;
       document.documentElement.style.setProperty('--sbw', w + 'px');
       invoke('ui:layout', { sidebarWidth: Math.round(w * zoom) });

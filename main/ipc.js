@@ -96,11 +96,12 @@ function wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mc
   ipcMain.handle('app:quit', () => app.quit());
   ipcMain.handle('app:devtools', () => tabs.inspect());
 
-  ipcMain.handle('ui:layout', ok(({ sidebarWidth, rightInset, topBar, uiScale }) => {
+  ipcMain.handle('ui:layout', ok(({ sidebarWidth, rightInset, topBar, uiScale, sidebarSide }) => {
     if (sidebarWidth) tabs.setSidebarWidth(sidebarWidth);
     if (rightInset !== undefined) tabs.setRightInset(rightInset);
     if (topBar !== undefined) tabs.setTopBar(topBar);
     if (uiScale !== undefined) tabs.setUiScale(uiScale);
+    if (sidebarSide !== undefined) tabs.setSidebarSide(sidebarSide);
   }));
 
   ipcMain.handle('app:openDownloads', () => shell.openPath(app.getPath('downloads')));

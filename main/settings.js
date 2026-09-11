@@ -19,7 +19,10 @@ const DEFAULTS = {
   accent: '#7aa2ff',
   tabLabels: true,            // false = icon-only tabs
   topBar: true,               // omnibox + nav buttons in a bar above the page
+  sidebarSide: 'left',        // which side of the window the tab rail sits on
   sidebarWidth: 268,
+  glassOpacity: 52,           // % opacity of the main glass surfaces
+  cornerRadius: 14,           // px, chrome corner roundness
   compact: false,
   reduceMotion: false,
   contextMenu: true,          // right-click menu on pages

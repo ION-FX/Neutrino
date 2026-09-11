@@ -109,9 +109,11 @@ browser can change that. What Neutrino fixes is the *other* thirty tabs.
 
 ## Settings overview
 
-- **Appearance** — Liquid Glass / Galaxy themes, accent color, top bar on/off,
-  tab names (icon-only mode), compact density, reduce motion, interface size
-  (90–125%), default page zoom, sidebar width, new-tab clock.
+- **Appearance** — Liquid Glass / Galaxy themes, accent color, **tab sidebar
+  position (left or right)**, top bar on/off, glass transparency slider,
+  corner roundness, tab names (icon-only mode), compact density, reduce
+  motion, interface size (90–125%), default page zoom, sidebar width,
+  new-tab clock.
 - **Quick links** — the tiles on the new-tab page.
 - **Tabs & memory** — auto-suspend timer, suspend-audible, lazy restore,
   renderer process cap, sleep notifications, suspend-now button, live stats.

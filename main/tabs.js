@@ -48,6 +48,7 @@ class TabManager extends require('events').EventEmitter {
     this.sidebarWidth = settings.get().sidebarWidth || 268;
     this.topBar = !!settings.get().topBar;
     this.uiScale = settings.get().uiScale || 1;
+    this.sidebarSide = settings.get().sidebarSide === 'right' ? 'right' : 'left';
     this.savedBytes = 0;
     this.suspendTimer = setInterval(() => this._sweep(), 30000);
     this._layoutDirty = false;
@@ -409,6 +410,11 @@ class TabManager extends require('events').EventEmitter {
     this._scheduleLayout();
   }
 
+  setSidebarSide(side) {
+    this.sidebarSide = side === 'right' ? 'right' : 'left';
+    this._scheduleLayout();
+  }
+
   setPageZoom(f) {
     const zoom = Math.max(0.3, Math.min(3, f || 1));
     for (const t of this.tabs.values()) {
@@ -434,13 +440,21 @@ class TabManager extends require('events').EventEmitter {
     const tab = this.activeTab();
     if (!tab?.view) return;
     const [w, h] = this.win.getContentSize();
-    // geometry mirrors the chrome UI: 8px outer frame; when the top bar is
-    // on it occupies 42px + gap above the page view; the settings drawer
-    // claims extra space on the right.
-    const x = Math.round(this.sidebarWidth + 14);
+    // geometry mirrors the chrome UI: 8px outer frame; the rail (scaled) and
+    // its 14px gap sit on whichever side Settings puts them; the settings
+    // drawer claims overlay space on the opposite side of the page view.
+    const eff = Math.round(this.sidebarWidth);
+    const overlay = 8 + (this.rightInset || 0);
+    let x, width;
+    if (this.sidebarSide === 'right') {
+      x = overlay;                                   // page view starts at the left edge
+      width = Math.max(0, w - x - eff - 14);         // rail + gap on the right
+    } else {
+      x = Math.round(eff + 14);
+      width = Math.max(0, w - x - overlay);
+    }
     const y = this.topBar ? 8 + Math.round(50 * this.uiScale) : 8;
-    const right = 8 + (this.rightInset || 0);
-    const bounds = { x, y, width: Math.max(0, w - x - right), height: Math.max(0, h - y - 8) };
+    const bounds = { x, y, width, height: Math.max(0, h - y - 8) };
     this._lastBounds = bounds;
     try {
       tab.view.setBounds(bounds);

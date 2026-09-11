@@ -78,6 +78,30 @@
     width.querySelector('input').addEventListener('change', (e) => NT.saveSettings({ sidebarWidth: +e.target.value }));
     app.appendChild(width);
 
+    app.appendChild(selectRow('Tab sidebar position',
+      [['left', 'Left'], ['right', 'Right']], st.sidebarSide === 'right' ? 'right' : 'left',
+      v => NT.saveSettings({ sidebarSide: v }), 'Which side of the window the tabs live on'));
+
+    const glassRow = document.createElement('div');
+    glassRow.className = 'set-row';
+    glassRow.innerHTML = `<div class="grow">Glass transparency <span class="sub">${st.glassOpacity ?? 52}% opacity</span></div>
+      <input type="range" min="20" max="90" step="2" value="${st.glassOpacity ?? 52}">`;
+    glassRow.querySelector('input').addEventListener('input', (e) => {
+      document.body.style.setProperty('--glass-a', String(e.target.value / 100));
+    });
+    glassRow.querySelector('input').addEventListener('change', (e) => NT.saveSettings({ glassOpacity: +e.target.value }));
+    app.appendChild(glassRow);
+
+    const radiusRow = document.createElement('div');
+    radiusRow.className = 'set-row';
+    radiusRow.innerHTML = `<div class="grow">Corner roundness <span class="sub">${st.cornerRadius ?? 14}px</span></div>
+      <input type="range" min="4" max="22" step="1" value="${st.cornerRadius ?? 14}">`;
+    radiusRow.querySelector('input').addEventListener('input', (e) => {
+      document.documentElement.style.setProperty('--radius', e.target.value + 'px');
+    });
+    radiusRow.querySelector('input').addEventListener('change', (e) => NT.saveSettings({ cornerRadius: +e.target.value }));
+    app.appendChild(radiusRow);
+
     app.appendChild(selectRow('Interface size',
       [['0.9', '90%'], ['1', '100%'], ['1.1', '110%'], ['1.25', '125%']], String(st.uiScale || 1),
       v => NT.saveSettings({ uiScale: +v }), 'Sidebar and top bar'));

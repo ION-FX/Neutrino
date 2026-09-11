@@ -32,6 +32,9 @@ body[data-theme="galaxy"] .blob { display: none; }
 
 /* ---------- app frame ---------- */
 #app { position: relative; z-index: 1; display: flex; height: 100vh; }
+body.sidebar-right #app { flex-direction: row-reverse; }
+body.sidebar-right #sidebar { margin: 8px 8px 8px 0; }
+body.sidebar-right #main-col { margin: 8px 0 8px 8px; }
 
 #main-col {
   flex: 1;
@@ -454,6 +457,8 @@ body[data-theme="galaxy"] #sidebar::before {
   box-shadow: var(--shadow);
   animation: drawerIn 220ms cubic-bezier(.2,.8,.25,1);
 }
+body.sidebar-right #settings-drawer { right: auto; left: 8px; animation-name: drawerInLeft; }
+@keyframes drawerInLeft { from { transform: translateX(-30px); opacity: 0; } }
 @keyframes drawerIn { from { transform: translateX(30px); opacity: 0; } }
 #settings-drawer header {
   display: flex; align-items: center; justify-content: space-between;
@@ -654,6 +659,10 @@ body.no-labels:not(.topbar) #omnibox-wrap.expanded, body.no-labels:not(.topbar) 
   position: fixed;
   left: 8px; top: 52px; bottom: 118px;
   width: 330px; z-index: 160;
+}
+body.no-labels.sidebar-right:not(.topbar) #omnibox-wrap.expanded,
+body.no-labels.sidebar-right:not(.topbar) #palette {
+  left: auto; right: 8px;
 }
 body.no-labels:not(.topbar) #omnibox-wrap.expanded #omnibox { width: auto; }
 
