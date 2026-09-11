@@ -506,6 +506,8 @@
     updSec.appendChild(updRow);
     updSec.appendChild(switchRow('Check for updates automatically', st.updates.autoCheck !== false,
       v => NT.saveSettings({ updates: { autoCheck: v } }), 'Once a day'));
+    updSec.appendChild(switchRow('Install updates automatically', st.updates.autoInstall === true,
+      v => NT.saveSettings({ updates: { autoInstall: v } }), 'Restarts Neutrino shortly after launch when a new version is out'));
     body.appendChild(updSec);
     NT.invoke('update:status').then(s => fillUpdStatus(updStatus, updRow.querySelector('[data-apply]'), s));
 

@@ -414,14 +414,18 @@ app.whenReady().then(async () => {
   // Self-updater via GitHub releases (Settings → Updates).
   const { Updater } = require('./updater');
   updater = new Updater({ settings, notify });
-  const autoCheck = setTimeout(async () => {
+  const updateTimer = setTimeout(async () => {
     const u = settings.get().updates || {};
     if (!u.autoCheck) return;
     if (Date.now() - (u.lastCheck || 0) < 20 * 3600 * 1000) return;
-    await updater.check();
-    if (win && !win.isDestroyed()) win.webContents.send('ui:update', updater.status());
-  }, 45000);
-  autoCheck.unref?.();
+    const st = await updater.check();
+    if (win && !win.isDestroyed()) win.webContents.send('ui:update', st);
+    // opt-in fully-automatic mode: apply as soon as an update is detected
+    if (st.updateAvailable && u.autoInstall && st.managed) {
+      await updater.apply();
+    }
+  }, 8000);
+  updateTimer.unref?.();
 
   const { wire } = require('./ipc');
   wire({ win, tabs, settings, paths, engine, adblockCtl, ext, history, mcp, updater });

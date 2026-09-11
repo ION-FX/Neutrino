@@ -33,7 +33,7 @@ const DEFAULTS = {
 
   downloads: { askWhere: false },            // ask where to save each file
   clearOnExit: { cache: false, cookies: false, history: false },
-  updates: { autoCheck: true, lastCheck: 0 },
+  updates: { autoCheck: true, autoInstall: false, lastCheck: 0 },
 
   suspendAfterMin: 10,        // 0 = never auto-suspend background tabs
   suspendAudible: false,      // if true, even audible tabs may sleep
